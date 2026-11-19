@@ -13,6 +13,25 @@ import (
 	"gotest.tools/v3/assert"
 )
 
+func TestCreateSnapshotGenerateTrace(t *testing.T) {
+	t.Parallel()
+
+	init, _ := projecttestutil.GetSessionInitOptions(map[string]any{
+		"/src/tsconfig.json": `{"compilerOptions":{"noLib":true,"generateTrace":"traces"},"files":["index.ts"]}`,
+		"/src/index.ts":      "export const n: number = 1;",
+	}, nil, nil)
+	session := NewStandaloneSession(init, nil)
+	defer session.Close()
+
+	response, err := session.handleCreateSnapshot(t.Context(), &CreateSnapshotParams{
+		OpenProjects: []DocumentIdentifier{{FileName: "/src/tsconfig.json"}},
+	})
+	assert.NilError(t, err)
+	assert.Equal(t, len(response.Projects), 1)
+	assert.Equal(t, response.Projects[0].ParsedCommandLine.Options.GenerateTrace, tspath.RootedDirectoryPath("/src/traces"))
+	assert.Assert(t, init.FS.FileExists("/src/traces/trace.json"))
+}
+
 func TestCreateSnapshotUsesIndependentRoots(t *testing.T) {
 	t.Parallel()
 	if !bundled.Embedded {

@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/TypeScript/tsc/internal/module"
 	"github.com/microsoft/TypeScript/tsc/internal/project/ata"
 	"github.com/microsoft/TypeScript/tsc/internal/project/logging"
+	"github.com/microsoft/TypeScript/tsc/internal/tracing"
 	"github.com/microsoft/TypeScript/tsc/internal/tsoptions"
 	"github.com/microsoft/TypeScript/tsc/internal/tspath"
 )
@@ -595,6 +596,19 @@ func (p *Project) CreateProgram(ctx context.Context) CreateProgramResult {
 		if p.GetTypeAcquisition().Enable.IsTrue() {
 			typingsLocation = p.host.sessionOptions.TypingsLocation
 		}
+		var tr *tracing.Tracing
+		if traceDir := commandLine.CompilerOptions().GenerateTrace; traceDir != "" {
+			tr, err = tracing.StartTracing(p.host.builder.fs.FS(), traceDir, commandLine.ConfigName().AsString(), false)
+			if err != nil {
+				p.host.logger.Warnf("Failed to start tracing: %v", err)
+			} else {
+				defer func() {
+					if err := tr.StopTracing(); err != nil {
+						p.host.logger.Warnf("Failed to stop tracing: %v", err)
+					}
+				}()
+			}
+		}
 		newProgram, err = compiler.NewProgram(
 			programCtx,
 			compiler.ProgramOptions{
@@ -604,6 +618,7 @@ func (p *Project) CreateProgram(ctx context.Context) CreateProgramResult {
 				TypingsLocation:             typingsLocation,
 				CreateCheckerPool:           createCheckerPool,
 				CreateModuleResolver:        createModuleResolver,
+				Tracing:                     tr,
 			},
 		)
 	}
