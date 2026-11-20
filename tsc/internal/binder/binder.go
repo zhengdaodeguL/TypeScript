@@ -1081,9 +1081,9 @@ func (b *Binder) bindDeferredExpandoAssignment(node *ast.Node) {
 			b.bindAnonymousDeclaration(node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.InternalSymbolNameComputed)
 			b.addLateBoundAssignmentDeclarationToSymbol(node, symbol)
 		} else {
-			// We declare expandos only when there are no non-expando declarations for that name.
+			// We declare expandos only when there are no non-expando value or alias declarations for that name.
 			exports := ast.GetExports(symbol, &b.symbolExtraArena)
-			if existing := exports.Get(b.getDeclarationName(node)); existing == nil || existing.Flags()&ast.SymbolFlagsAssignment != 0 {
+			if existing := exports.Get(b.getDeclarationName(node)); existing == nil || existing.Flags()&ast.SymbolFlagsAssignment != 0 || existing.Flags()&(ast.SymbolFlagsValue|ast.SymbolFlagsAlias) == 0 {
 				b.declareSymbol(exports, symbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsPropertyExcludes)
 			}
 		}

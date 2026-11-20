@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/expandoFunctionMergedWithTypeNamespace.ts] ////
+
+=== expandoFunctionMergedWithTypeNamespace.ts ===
+export function f() {}
+>f : { (): void; a: number; }
+
+f.a = 0;
+>f.a = 0 : 0
+>f.a : number
+>f : { (): void; a: number; }
+>a : number
+>0 : 0
+
+export namespace f {
+    export type a = 0;
+>a : 0
+}
+export const value: number = f.a;
+>value : number
+>f.a : number
+>f : { (): void; a: number; }
+>a : number
+
+export const type: f.a = 0;
+>type : 0
+>f : any
+>0 : 0
+
+export function Popover() { return null; }
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
+
+Popover.Target = (x: number) => x;
+>Popover.Target = (x: number) => x : (x: number) => number
+>Popover.Target : (x: number) => number
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
+>Target : (x: number) => number
+>(x: number) => x : (x: number) => number
+>x : number
+>x : number
+
+Popover.displayName = "Popover";
+>Popover.displayName = "Popover" : "Popover"
+>Popover.displayName : string
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
+>displayName : string
+>"Popover" : "Popover"
+
+export namespace Popover {
+    export namespace Target {
+        export type Props = number;
+>Props : number
+    }
+}
+export const result: number = Popover.Target(1);
+>result : number
+>Popover.Target(1) : number
+>Popover.Target : (x: number) => number
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
+>Target : (x: number) => number
+>1 : 1
+
+export const name: string = Popover.displayName;
+>name : string
+>Popover.displayName : string
+>Popover : { (): null; displayName: string; Target: (x: number) => number; }
+>displayName : string
+
+export const props: Popover.Target.Props = 1;
+>props : number
+>Popover : any
+>Target : any
+>1 : 1
+

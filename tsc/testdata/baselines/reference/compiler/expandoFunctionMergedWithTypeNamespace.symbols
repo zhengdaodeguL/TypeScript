@@ -1,0 +1,71 @@
+//// [tests/cases/compiler/expandoFunctionMergedWithTypeNamespace.ts] ////
+
+=== expandoFunctionMergedWithTypeNamespace.ts ===
+export function f() {}
+>f : Symbol(f, Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 0), Decl(expandoFunctionMergedWithTypeNamespace.ts, 1, 8))
+
+f.a = 0;
+>f.a : Symbol(f.a, Decl(expandoFunctionMergedWithTypeNamespace.ts, 2, 20), Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 22))
+>f : Symbol(f, Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 0), Decl(expandoFunctionMergedWithTypeNamespace.ts, 1, 8))
+>a : Symbol(f.a, Decl(expandoFunctionMergedWithTypeNamespace.ts, 2, 20), Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 22))
+
+export namespace f {
+>f : Symbol(f, Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 0), Decl(expandoFunctionMergedWithTypeNamespace.ts, 1, 8))
+
+    export type a = 0;
+>a : Symbol(a, Decl(expandoFunctionMergedWithTypeNamespace.ts, 2, 20), Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 22))
+}
+export const value: number = f.a;
+>value : Symbol(value, Decl(expandoFunctionMergedWithTypeNamespace.ts, 5, 12))
+>f.a : Symbol(f.a, Decl(expandoFunctionMergedWithTypeNamespace.ts, 2, 20), Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 22))
+>f : Symbol(f, Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 0), Decl(expandoFunctionMergedWithTypeNamespace.ts, 1, 8))
+>a : Symbol(f.a, Decl(expandoFunctionMergedWithTypeNamespace.ts, 2, 20), Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 22))
+
+export const type: f.a = 0;
+>type : Symbol(type, Decl(expandoFunctionMergedWithTypeNamespace.ts, 6, 12))
+>f : Symbol(f, Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 0), Decl(expandoFunctionMergedWithTypeNamespace.ts, 1, 8))
+>a : Symbol(f.a, Decl(expandoFunctionMergedWithTypeNamespace.ts, 2, 20), Decl(expandoFunctionMergedWithTypeNamespace.ts, 0, 22))
+
+export function Popover() { return null; }
+>Popover : Symbol(Popover, Decl(expandoFunctionMergedWithTypeNamespace.ts, 6, 27), Decl(expandoFunctionMergedWithTypeNamespace.ts, 10, 32))
+
+Popover.Target = (x: number) => x;
+>Popover.Target : Symbol(Popover.Target, Decl(expandoFunctionMergedWithTypeNamespace.ts, 11, 26), Decl(expandoFunctionMergedWithTypeNamespace.ts, 8, 42))
+>Popover : Symbol(Popover, Decl(expandoFunctionMergedWithTypeNamespace.ts, 6, 27), Decl(expandoFunctionMergedWithTypeNamespace.ts, 10, 32))
+>Target : Symbol(Popover.Target, Decl(expandoFunctionMergedWithTypeNamespace.ts, 11, 26), Decl(expandoFunctionMergedWithTypeNamespace.ts, 8, 42))
+>x : Symbol(x, Decl(expandoFunctionMergedWithTypeNamespace.ts, 9, 18))
+>x : Symbol(x, Decl(expandoFunctionMergedWithTypeNamespace.ts, 9, 18))
+
+Popover.displayName = "Popover";
+>Popover.displayName : Symbol(Popover.displayName, Decl(expandoFunctionMergedWithTypeNamespace.ts, 9, 34))
+>Popover : Symbol(Popover, Decl(expandoFunctionMergedWithTypeNamespace.ts, 6, 27), Decl(expandoFunctionMergedWithTypeNamespace.ts, 10, 32))
+>displayName : Symbol(Popover.displayName, Decl(expandoFunctionMergedWithTypeNamespace.ts, 9, 34))
+
+export namespace Popover {
+>Popover : Symbol(Popover, Decl(expandoFunctionMergedWithTypeNamespace.ts, 6, 27), Decl(expandoFunctionMergedWithTypeNamespace.ts, 10, 32))
+
+    export namespace Target {
+>Target : Symbol(Target, Decl(expandoFunctionMergedWithTypeNamespace.ts, 11, 26), Decl(expandoFunctionMergedWithTypeNamespace.ts, 8, 42))
+
+        export type Props = number;
+>Props : Symbol(Props, Decl(expandoFunctionMergedWithTypeNamespace.ts, 12, 29))
+    }
+}
+export const result: number = Popover.Target(1);
+>result : Symbol(result, Decl(expandoFunctionMergedWithTypeNamespace.ts, 16, 12))
+>Popover.Target : Symbol(Popover.Target, Decl(expandoFunctionMergedWithTypeNamespace.ts, 11, 26), Decl(expandoFunctionMergedWithTypeNamespace.ts, 8, 42))
+>Popover : Symbol(Popover, Decl(expandoFunctionMergedWithTypeNamespace.ts, 6, 27), Decl(expandoFunctionMergedWithTypeNamespace.ts, 10, 32))
+>Target : Symbol(Popover.Target, Decl(expandoFunctionMergedWithTypeNamespace.ts, 11, 26), Decl(expandoFunctionMergedWithTypeNamespace.ts, 8, 42))
+
+export const name: string = Popover.displayName;
+>name : Symbol(name, Decl(expandoFunctionMergedWithTypeNamespace.ts, 17, 12))
+>Popover.displayName : Symbol(Popover.displayName, Decl(expandoFunctionMergedWithTypeNamespace.ts, 9, 34))
+>Popover : Symbol(Popover, Decl(expandoFunctionMergedWithTypeNamespace.ts, 6, 27), Decl(expandoFunctionMergedWithTypeNamespace.ts, 10, 32))
+>displayName : Symbol(Popover.displayName, Decl(expandoFunctionMergedWithTypeNamespace.ts, 9, 34))
+
+export const props: Popover.Target.Props = 1;
+>props : Symbol(props, Decl(expandoFunctionMergedWithTypeNamespace.ts, 18, 12))
+>Popover : Symbol(Popover, Decl(expandoFunctionMergedWithTypeNamespace.ts, 6, 27), Decl(expandoFunctionMergedWithTypeNamespace.ts, 10, 32))
+>Target : Symbol(Popover.Target, Decl(expandoFunctionMergedWithTypeNamespace.ts, 11, 26), Decl(expandoFunctionMergedWithTypeNamespace.ts, 8, 42))
+>Props : Symbol(Popover.Target.Props, Decl(expandoFunctionMergedWithTypeNamespace.ts, 12, 29))
+
